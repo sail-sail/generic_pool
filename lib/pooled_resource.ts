@@ -1,0 +1,55 @@
+import { PooledResourceStateEnum } from "./pooled_resource_state_enum.ts";
+
+/**
+ * @class
+ * @private
+ */
+class PooledResource<T> {
+  
+  creationTime: number;
+  lastReturnTime: number|null;
+  lastBorrowTime: number|null;
+  lastIdleTime: number|null;
+  state: string;
+  obj: T;
+  
+  constructor(resource: T) {
+    this.creationTime = Date.now();
+    this.lastReturnTime = null;
+    this.lastBorrowTime = null;
+    this.lastIdleTime = null;
+    this.obj = resource;
+    this.state = PooledResourceStateEnum.IDLE;
+  }
+
+  // mark the resource as "allocated"
+  allocate() {
+    this.lastBorrowTime = Date.now();
+    this.state = PooledResourceStateEnum.ALLOCATED;
+  }
+
+  // mark the resource as "deallocated"
+  deallocate() {
+    this.lastReturnTime = Date.now();
+    this.state = PooledResourceStateEnum.IDLE;
+  }
+
+  invalidate() {
+    this.state = PooledResourceStateEnum.INVALID;
+  }
+
+  test() {
+    this.state = PooledResourceStateEnum.VALIDATION;
+  }
+
+  idle() {
+    this.lastIdleTime = Date.now();
+    this.state = PooledResourceStateEnum.IDLE;
+  }
+
+  returning() {
+    this.state = PooledResourceStateEnum.RETURNING;
+  }
+}
+
+export { PooledResource }
