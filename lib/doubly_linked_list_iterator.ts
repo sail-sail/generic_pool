@@ -15,7 +15,7 @@ import { DoublyLinkedList, Node } from "./doubly_linked_list.ts";
  */
 class DoublyLinkedListIterator<T> {
   
-  #list: DoublyLinkedList<T>;
+  _list: DoublyLinkedList<T>;
   #direction: "prev" | "next";
   #startPosition: "tail" | "head";
   #started: boolean;
@@ -27,7 +27,7 @@ class DoublyLinkedListIterator<T> {
    * @param  {Boolean} [reverse=false]     is this a reverse iterator? default: false
    */
   constructor(doublyLinkedList: DoublyLinkedList<T>, reverse: boolean = false) {
-    this.#list = doublyLinkedList;
+    this._list = doublyLinkedList;
     // NOTE: these key names are tied to the DoublyLinkedListIterator
     this.#direction = reverse === true ? "prev" : "next";
     this.#startPosition = reverse === true ? "tail" : "head";
@@ -37,14 +37,14 @@ class DoublyLinkedListIterator<T> {
   }
 
   _start() {
-    this.#cursor = this.#list[this.#startPosition];
+    this.#cursor = this._list[this.#startPosition];
     this.#started = true;
   }
 
   _advanceCursor() {
     if (this.#started === false) {
       this.#started = true;
-      this.#cursor = this.#list[this.#startPosition];
+      this.#cursor = this._list[this.#startPosition];
       return;
     }
     this.#cursor = this.#cursor?.[this.#direction] || null;
@@ -65,7 +65,7 @@ class DoublyLinkedListIterator<T> {
       return false;
     }
     if (this.#cursor) {
-      this.#list.remove(this.#cursor);
+      this._list.remove(this.#cursor);
     }
   }
 
@@ -101,8 +101,8 @@ class DoublyLinkedListIterator<T> {
     return (
       this.#cursor?.prev === null &&
       this.#cursor?.next === null &&
-      this.#list.tail !== this.#cursor &&
-      this.#list.head !== this.#cursor
+      this._list.tail !== this.#cursor &&
+      this._list.head !== this.#cursor
     );
   }
 }

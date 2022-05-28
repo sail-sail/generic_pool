@@ -7,10 +7,10 @@ import { DequeIterator } from "./deque_iterator.ts";
  */
 class Deque<T> {
   
-  #list: DoublyLinkedList<T>;
+  _list: DoublyLinkedList<T>;
   
   constructor() {
-    this.#list = new DoublyLinkedList();
+    this._list = new DoublyLinkedList();
   }
 
   /**
@@ -22,11 +22,11 @@ class Deque<T> {
       return undefined;
     }
 
-    const node = this.#list.head;
+    const node = this._list.head;
     if (node === null) {
       return;
     }
-    this.#list.remove(node);
+    this._list.remove(node);
 
     return node.data;
   }
@@ -38,7 +38,7 @@ class Deque<T> {
   unshift(element: T) {
     const node = DoublyLinkedList.createNode(element);
 
-    this.#list.insertBeginning(node);
+    this._list.insertBeginning(node);
   }
 
   /**
@@ -48,7 +48,7 @@ class Deque<T> {
   push(element: T) {
     const node = DoublyLinkedList.createNode(element);
 
-    this.#list.insertEnd(node);
+    this._list.insertEnd(node);
   }
 
   /**
@@ -59,25 +59,25 @@ class Deque<T> {
       return undefined;
     }
 
-    const node = this.#list.tail;
+    const node = this._list.tail;
     if (node === null) {
       return;
     }
-    this.#list.remove(node);
+    this._list.remove(node);
 
     return node.data;
   }
 
   [Symbol.iterator]() {
-    return new DequeIterator(this.#list);
+    return new DequeIterator(this._list);
   }
 
   iterator() {
-    return new DequeIterator(this.#list);
+    return new DequeIterator(this._list);
   }
 
   reverseIterator() {
-    return new DequeIterator(this.#list, true);
+    return new DequeIterator(this._list, true);
   }
 
   /**
@@ -87,7 +87,7 @@ class Deque<T> {
     if (this.length === 0) {
       return undefined;
     }
-    const node = this.#list.head;
+    const node = this._list.head;
     if (node === null) {
       return undefined;
     }
@@ -101,7 +101,7 @@ class Deque<T> {
     if (this.length === 0) {
       return undefined;
     }
-    const node = this.#list.tail;
+    const node = this._list.tail;
     if (node === null) {
       return undefined;
     }
@@ -109,7 +109,7 @@ class Deque<T> {
   }
 
   get length() {
-    return this.#list.length;
+    return this._list.length;
   }
 }
 
