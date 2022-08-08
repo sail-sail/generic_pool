@@ -1,5 +1,3 @@
-import { EventEmitter } from "../deps.ts";
-
 import factoryValidator from "./factory_validator.ts";
 import { PoolOptions } from "./pool_options.ts";
 import { ResourceRequest } from "./resource_request.ts";
@@ -9,7 +7,7 @@ import { DefaultEvictor } from "./default_evictor.ts";
 import { Deque } from "./deque.ts";
 import { Deferred } from "./deferred.ts";
 import { PriorityQueue } from "./priority_queue.ts";
-import { DequeIterator } from "./deque_iterator.ts";
+import { type DequeIterator } from "./deque_iterator.ts";
 
 import { reflector } from "./utils.ts";
 
@@ -38,10 +36,10 @@ interface Options {
 /**
  * TODO: move me
  */
-const FACTORY_CREATE_ERROR = "factoryCreateError";
-const FACTORY_DESTROY_ERROR = "factoryDestroyError";
+// const FACTORY_CREATE_ERROR = "factoryCreateError";
+// const FACTORY_DESTROY_ERROR = "factoryDestroyError";
 
-class Pool<T> extends EventEmitter {
+class Pool<T> {
   
   private _config: PoolOptions;
   private _factory: Factory<T>;
@@ -77,7 +75,7 @@ class Pool<T> extends EventEmitter {
    * @param {Object} options
    */
   constructor(factory: Factory<T>, options?: Options) {
-    super();
+    // super();
 
     factoryValidator(factory);
 
@@ -174,9 +172,7 @@ class Pool<T> extends EventEmitter {
     this._trackOperation(
       wrappedDestroyPromise,
       this._factoryDestroyOperations
-    ).catch((reason: Error) => {
-      this.emit(FACTORY_DESTROY_ERROR, reason);
-    });
+    );
 
     // TODO: maybe ensuring minimum pool size should live outside here
     this._ensureMinimum();
@@ -368,8 +364,9 @@ class Pool<T> extends EventEmitter {
         return null;
       })
       .catch(reason => {
-        this.emit(FACTORY_CREATE_ERROR, reason);
+        // this.emit(FACTORY_CREATE_ERROR, reason);
         this._dispense();
+        throw reason;
       });
   }
 
